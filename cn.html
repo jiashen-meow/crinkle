@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crinkle — 让小猫帮你戒断上瘾app</title>
+<meta name="description" content="Crinkle 将你的屏幕使用时间变成一场火花四射的对战">
+<link rel="icon" href="appIcon.png">
+<!-- 自托管字体：不依赖 Google Fonts，中国大陆可正常加载 -->
+<link rel="preload" href="fonts/LXGWMarkerGothic-subset.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  /* 霞鹜漫黑 LXGW Marker Gothic — SIL OFL 1.1
+     子集化文件，只包含本页 .hand 元素用到的 77 个字符。
+     改动过标题/副标题/按钮等手写体文案后，需要重新生成这个 woff2。 */
+  @font-face{
+    font-family:"LXGW Marker Gothic";
+    src:url("fonts/LXGWMarkerGothic-subset.woff2") format("woff2");
+    font-weight:400; font-style:normal;
+    font-display:swap;
+  }
+</style>
+<style>
+  :root{
+    --sky: #449DD1;
+    --sky-deep: #3C8DBE;
+    --cream: #F4EFE2;
+    --ink: #14232E;
+    --ink-soft: rgba(20,35,46,0.66);
+    --border: rgba(20,35,46,0.16);
+    --nav-h: 92px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0; overflow-x:hidden;
+    background-color: var(--sky);            /* 图片没加载出来时的兜底色 */
+    background-image: url("crinkle-bg-wide-2400x1350.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  img{ display:block; max-width:100%; }
+  a{ color: inherit; }
+  .hand{ font-family:"LXGW Marker Gothic","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; font-weight:400; }
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .wrap-wide{ max-width: 1220px; margin: 0 auto; padding: 0 32px; }
+  /* NAV */
+  .nav{ padding: 26px 0; }
+  .nav-inner{
+    max-width: 1220px; margin:0 auto; padding: 0 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .brand-mark{
+    width: 30px; height: 30px; border-radius: 7px;
+    box-shadow: 0 2px 8px rgba(20,35,46,0.22);
+  }
+  .wordmark{ font-size: 1.3rem; }
+  .btn{
+    display:inline-block;
+    border-radius: 999px; font-weight:600; text-decoration:none;
+    padding: 12px 26px; font-size: 0.86rem;
+    background: var(--ink); color: var(--cream);
+    box-shadow: 0 4px 14px rgba(20,35,46,0.22);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 20px rgba(20,35,46,0.28); }
+  .btn-nav{ padding: 9px 20px; font-size: 0.8rem; }
+  /* HERO — fills the first screen */
+  .hero{
+    position:relative;
+    min-height: calc(100svh - var(--nav-h));
+    display:flex; align-items:center;
+    padding: 20px 0 90px;
+  }
+  .hero-grid{
+    width:100%;
+    display:grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items:center;
+  }
+  h1{
+    font-size: clamp(1.5rem, 3.5vw, 3.0rem);
+    font-weight: 400;
+    margin: 0 0 22px;
+    line-height: 1.4;
+  }
+  .tagline{
+    font-size: 1.15rem; font-weight:400;
+    margin: 0 0 44px; color: rgba(20,35,46,0.72);
+  }
+  .hero-image{ display:flex; justify-content:center; }
+  .hero-image img{
+    width: 100%; max-width: 250px;
+    filter: drop-shadow(0 14px 26px rgba(20,35,46,0.26));
+  }
+  .hero-note{
+    margin: 14px 0 0; font-size: 0.9rem; line-height: 1.5;
+    color: rgba(20,35,46,0.58); white-space: nowrap;
+  }
+  .hero-note a{ color: inherit; text-underline-offset: 3px; }
+  .scroll-cue{
+    position:absolute; left:50%; bottom: 30px; transform: translateX(-50%);
+    font-size: 0.84rem; color: rgba(20,35,46,0.55); text-decoration:none;
+    white-space: nowrap;
+  }
+  .scroll-cue:hover{ color: var(--ink); }
+  /* SECTIONS */
+  .row{ padding: 70px 0 80px; position:relative; }
+  .section-title{
+    font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+    text-align:center; margin: 0 0 54px;
+  }
+  .row-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+  }
+  .cell{ text-align:center; display:flex; flex-direction:column; min-width:0; }
+  .cell .num{
+    display:block; font-size: 1.25rem;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .cell .cap{
+    color: var(--ink-soft); font-size: 0.88rem;
+    max-width: 30ch; margin: 0 auto 22px;
+  }
+  .cell .label{
+    color: var(--ink); font-size: 1.15rem; margin: 0 0 22px;
+  }
+  .cell-img{
+    position:relative; z-index:1;
+    height: clamp(380px, 46vw, 560px);
+    display:flex; align-items:flex-end; justify-content:center;
+    margin-top: auto;
+  }
+  .cell-img img{
+    height: 100%; max-width: 100%; width:auto; object-fit: contain;
+    filter: drop-shadow(0 18px 34px rgba(20,35,46,0.30));
+  }
+  /* LETTER — a paper note on the blue */
+  .letter{
+    min-height: calc(100svh - 100px);
+    display:flex; align-items:center;
+    padding: 60px 0;
+  }
+  .letter > .wrap{ width:100%; }
+  .letter-inner{
+    max-width: 460px; margin: 0 auto; text-align:left;
+    color: #FBF8F1;
+  }
+  .letter .section-title{
+    color: #FBF8F1; font-size: clamp(1.35rem, 2.1vw, 1.65rem);
+    margin: 0 0 34px; text-align:center;
+  }
+  .letter p{
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 0.95rem; font-weight:500; line-height: 1.95;
+    margin: 0 0 20px;
+  }
+  .letter a{ text-decoration: underline; text-underline-offset: 3px; }
+  .letter .links{ font-size: 0.95rem; font-weight:500; line-height: 1.95; margin-top: 30px; }
+  .letter .version{
+    font-size: 0.76rem; color: rgba(251,248,241,0.62); font-weight:500;
+    margin: 30px 0 0; text-align:right;
+  }
+  /* cat heads poking in from the edges, bottom-aligned with the screenshots */
+  .peek{
+    position:absolute; bottom: 24px; z-index:0;
+    display:flex; line-height:0;
+  }
+  .peek-left{ left:0; }
+  .peek-right{ right:0; }
+  .peek img{
+    width: clamp(92px, 10.5vw, 150px);
+    filter: drop-shadow(0 12px 24px rgba(20,35,46,0.26));
+  }
+  .peek-left img{ margin-left: -6px; }
+  .peek-right img{ margin-right: -6px; }
+  /* not enough side room — drop them back to the section edge */
+  @media (max-width: 1040px){
+    .peek{ position:static; padding: 34px 0 0; }
+    .peek-left{ justify-content:flex-start; }
+    .peek-right{ justify-content:flex-end; }
+  }
+  /* FOOTER */
+  .footer{ padding: 26px 0 38px; }
+  .footer-inner{
+    max-width: 1080px; margin: 0 auto; padding: 0 32px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 14px; flex-wrap: wrap;
+    font-size: 0.78rem; color: var(--ink-soft);
+  }
+  .footer-links{ display:flex; gap: 22px; }
+  .footer-links a{ text-decoration:none; }
+  .footer-links a:hover{ text-decoration:underline; text-underline-offset: 3px; }
+  @media (max-width: 780px){
+    .hero{ padding: 10px 0 40px; }
+    .wrap, .wrap-wide{ padding: 0 18px; }
+    h1{
+      font-size: min(6.4vw, 2rem); white-space: nowrap;
+      letter-spacing: -0.01em; margin-bottom: 8px;
+    }
+    .tagline{ font-size: min(4vw, 1.1rem); white-space: nowrap; }
+    .hero-grid{ grid-template-columns: 1fr; text-align:center; gap: 24px; }
+    .hero-image{ order:-1; }
+    .hero-note{ margin-left:auto; margin-right:auto; font-size: min(3.5vw, 0.9rem); }
+    .hero-image img{ max-width: 170px; }
+    .scroll-cue{ bottom: 18px; font-size: 0.8rem; }
+    .row-grid{ grid-template-columns: 1fr; gap: 56px; }
+    .cell-img{ height: auto; }
+    .cell-img img{ height:auto; width:100%; max-height: 70svh; }
+    .section-title{ margin-bottom: 40px; }
+    .letter{ padding: 96px 0 84px; }
+    .letter-inner{ padding: 0 6px; }
+    .peek img{ width: clamp(90px, 22vw, 130px); }
+    .footer-inner{ justify-content:center; text-align:center; }
+  }
+
+  /* 竖屏 / 窄屏用竖版底图 */
+  @media (max-width: 900px){
+    body{ background-image: url("crinkle-bg-story-1080x1920.png"); }
+  }
+  @media (min-width: 901px) and (max-width: 1200px){
+    body{ background-image: url("crinkle-bg-square-1080.png"); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .btn{ transition:none; }
+  }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <img class="brand-mark" src="appIcon.png" alt="">
+      <span class="wordmark hand">Crinkle</span>
+    </a>
+    <a class="btn btn-nav" href="https://testflight.apple.com/join/jCTxr58f" target="_blank" rel="noopener">iOS下载</a>
+  </div>
+</header>
+<main>
+  <section class="hero" id="top">
+    <div class="wrap-wide hero-grid">
+      <div class="hero-text">
+        <h1 class="hand">Crinkle：让小猫帮你戒断上瘾app</h1>
+        <p class="tagline hand">Crinkle 把你的屏幕使用时间变成一场火花四射的对战</p>
+        <a class="btn" href="https://testflight.apple.com/join/jCTxr58f" target="_blank" rel="noopener">iOS下载</a>
+        <p class="hero-note hand">↑ 点击下载 beta 版本
+        </p>
+        <a class="scroll-cue hand" href="#how">查看使用方法 ↓</a>
+      </div>
+      <div class="hero-image">
+        <img src="cat-speechless.png" alt="Crinkle小猫">
+      </div>
+    </div>
+  </section>
+  <section class="row" id="how">
+    <div class="peek peek-left"><img src="LookingFromLeft.png" alt=""></div>
+    <div class="wrap">
+      <h2 class="section-title hand">使用方法</h2>
+      <div class="row-grid">
+        <div class="cell">
+          <span class="num hand">步骤 1</span>
+          <p class="cap">选出一个“敌方”应用喂袋子，再选一个“友方”应用喂猫咪。</p>
+          <div class="cell-img"><img src="Explanation-1-cn.png" alt="选择敌方与友方应用"></div>
+        </div>
+        <div class="cell">
+          <span class="num hand">步骤 2</span>
+          <p class="cap">你在每个应用里每停留一分钟，就会给对应一方增加分数，每日上限两小时。</p>
+          <div class="cell-img"><img src="Explanation-2-cn.png" alt="对战进行中"></div>
+        </div>
+        <div class="cell">
+          <span class="num hand">步骤 3</span>
+          <p class="cap">午夜结算，吃得更多的一方获得胜利。</p>
+          <div class="cell-img"><img src="Explanation-3.png" alt="对战结果"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="row">
+    <div class="wrap">
+      <h2 class="section-title hand">更多功能</h2>
+      <div class="row-grid">
+        <div class="cell">
+          <p class="label hand">全尺寸小组件</p>
+          <div class="cell-img"><img src="NiceFeature-Widgets.png" alt="主屏幕小组件"></div>
+        </div>
+        <div class="cell">
+          <p class="label hand">对战历史记录</p>
+          <div class="cell-img"><img src="NiceFeature-History.png" alt="对战历史日历"></div>
+        </div>
+        <div class="cell">
+          <p class="label hand">可解锁成就</p>
+          <div class="cell-img"><img src="NiceFeature-Achievement.png" alt="成就图鉴"></div>
+        </div>
+      </div>
+    </div>
+    <div class="peek peek-right"><img src="LookingFromRight.png" alt=""></div>
+  </section>
+  <section class="letter">
+    <div class="wrap">
+      <div class="letter-inner">
+        <h2 class="section-title hand">开发者的话</h2>
+        <p>当初做这款 App，是因为我自己也总放不下手机，忍不住一遍遍地刷。</p>
+        <p>我和自己的注意力博弈时，就算某天摆烂没达到预期，我学会允许自己第二天重新再来。</p>
+        <p>我学着像包容小猫那样包容自己：不去给自己定苛刻目标，也不过度苛责自己。</p>
+        <p class="links">有 bug 或是新奇想法，欢迎写信告诉我：<a href="mailto:support@feedcrinkle.com">support@feedcrinkle.com</a></p>
+        <p class="version">—— Crinkle v1.1</p>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="footer-inner">
+    <span>&copy; 2026 Crinkle 保留所有权利。</span>
+    <nav class="footer-links">
+      <a href="/privacy">隐私政策</a>
+      <a href="/terms">使用条款</a>
+      <a href="mailto:support@feedcrinkle.com">技术支持</a>
+    </nav>
+  </div>
+</footer>
+<script>
+  /* keeps the hero title + tagline on a single line at any phone width */
+  (function(){
+    var h1 = document.querySelector('.hero h1');
+    var tag = document.querySelector('.hero .tagline');
+    var note = document.querySelector('.hero-note');
+    function fit(el){
+      if(!el) return;
+      el.style.fontSize = '';
+      if(window.innerWidth > 780) return;
+      var avail = el.parentElement.clientWidth * 0.94;   // 两侧留白，别贴边
+      var size = parseFloat(getComputedStyle(el).fontSize);
+      var w = el.scrollWidth;
+      if(w > avail) el.style.fontSize = Math.floor(size * (avail / w) * 100) / 100 + 'px';
+    }
+    function run(){ fit(h1); fit(tag); fit(note); }
+    run();
+    window.addEventListener('resize', run);
+    window.addEventListener('orientationchange', run);
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  })();
+</script>
+</body>
+</html>

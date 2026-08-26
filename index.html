@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crinkle — Cat vs. Worst App</title>
+<meta name="description" content="Crinkle turns your screen time into a fight. Pick the apps that feed the cat, and the apps that feed the bag.">
+<link rel="icon" href="appIcon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schoolbell&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky: #449DD1;
+    --sky-deep: #3C8DBE;
+    --cream: #F4EFE2;
+    --ink: #14232E;
+    --ink-soft: rgba(20,35,46,0.66);
+    --border: rgba(20,35,46,0.16);
+    --nav-h: 92px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0; overflow-x:hidden;
+    background-color: var(--sky);            /* 图片没加载出来时的兜底色 */
+    background-image: url("crinkle-bg-wide-2400x1350.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  img{ display:block; max-width:100%; }
+  a{ color: inherit; }
+  .hand{ font-family: "Schoolbell", cursive; font-weight:400; }
+
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .wrap-wide{ max-width: 1220px; margin: 0 auto; padding: 0 32px; }
+
+  /* NAV */
+  .nav{ padding: 26px 0; }
+  .nav-inner{
+    max-width: 1220px; margin:0 auto; padding: 0 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .brand-mark{
+    width: 30px; height: 30px; border-radius: 7px;
+    box-shadow: 0 2px 8px rgba(20,35,46,0.22);
+  }
+  .wordmark{ font-size: 1.45rem; }
+
+  .btn{
+    display:inline-block;
+    border-radius: 999px; font-weight:600; text-decoration:none;
+    padding: 12px 26px; font-size: 0.92rem;
+    background: var(--ink); color: var(--cream);
+    box-shadow: 0 4px 14px rgba(20,35,46,0.22);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 20px rgba(20,35,46,0.28); }
+  .btn-nav{ padding: 9px 20px; font-size: 0.85rem; }
+
+  /* HERO — fills the first screen */
+  .hero{
+    position:relative;
+    min-height: calc(100svh - var(--nav-h));
+    display:flex; align-items:center;
+    padding: 20px 0 90px;
+  }
+  .hero-grid{
+    width:100%;
+    display:grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items:center;
+  }
+  h1{
+    font-size: clamp(2.1rem, 4vw, 3rem);
+    font-weight: 400;
+    margin: 0 0 10px;
+    line-height: 1.18;
+  }
+  .tagline{
+    font-size: 1.3rem; font-weight:400;
+    margin: 0 0 44px; color: rgba(20,35,46,0.72);
+  }
+  .hero-image{ display:flex; justify-content:center; }
+  .hero-image img{
+    width: 100%; max-width: 250px;
+    filter: drop-shadow(0 14px 26px rgba(20,35,46,0.26));
+  }
+  .hero-note{
+    margin: 14px 0 0; font-size: 1rem; line-height: 1.5;
+    color: rgba(20,35,46,0.58); white-space: nowrap;
+  }
+  .hero-note a{ color: inherit; text-underline-offset: 3px; }
+  .scroll-cue{
+    position:absolute; left:50%; bottom: 30px; transform: translateX(-50%);
+    font-size: 0.9rem; color: rgba(20,35,46,0.55); text-decoration:none;
+    white-space: nowrap;
+  }
+  .scroll-cue:hover{ color: var(--ink); }
+
+  /* SECTIONS */
+  .row{ padding: 70px 0 80px; position:relative; }
+  .section-title{
+    font-size: clamp(1.7rem, 2.8vw, 2.1rem);
+    text-align:center; margin: 0 0 54px;
+  }
+  .row-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+  }
+
+  .cell{ text-align:center; display:flex; flex-direction:column; min-width:0; }
+  .cell .num{
+    display:block; font-size: 1.4rem;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .cell .cap{
+    color: var(--ink-soft); font-size: 0.95rem;
+    max-width: 30ch; margin: 0 auto 22px;
+  }
+  .cell .label{
+    color: var(--ink); font-size: 1.3rem; margin: 0 0 22px;
+  }
+  .cell-img{
+    position:relative; z-index:1;
+    height: clamp(380px, 46vw, 560px);
+    display:flex; align-items:flex-end; justify-content:center;
+    margin-top: auto;
+  }
+  .cell-img img{
+    height: 100%; max-width: 100%; width:auto; object-fit: contain;
+    filter: drop-shadow(0 18px 34px rgba(20,35,46,0.30));
+  }
+
+  /* LETTER — a paper note on the blue */
+  .letter{
+    min-height: calc(100svh - 100px);
+    display:flex; align-items:center;
+    padding: 60px 0;
+  }
+  .letter > .wrap{ width:100%; }
+  .letter-inner{
+    max-width: 430px; margin: 0 auto; text-align:center;
+    color: #FBF8F1;
+  }
+  .letter .section-title{
+    color: #FBF8F1; font-size: clamp(1.5rem, 2.4vw, 1.85rem);
+    margin: 0 0 34px;
+  }
+  .letter p{
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 1rem; font-weight:500; line-height: 1.8;
+    margin: 0 0 22px;
+  }
+  .letter a{ text-decoration: underline; text-underline-offset: 3px; }
+  .letter .links{ color: #FBF8F1; font-weight:500; }
+  .letter .version{
+    font-size: 0.8rem; color: rgba(251,248,241,0.62); font-weight:500; margin: 34px 0 0;
+  }
+
+
+  /* cat heads poking in from the edges, bottom-aligned with the screenshots */
+  .peek{
+    position:absolute; bottom: 24px; z-index:0;
+    display:flex; line-height:0;
+  }
+  .peek-left{ left:0; }
+  .peek-right{ right:0; }
+  .peek img{
+    width: clamp(92px, 10.5vw, 150px);
+    filter: drop-shadow(0 12px 24px rgba(20,35,46,0.26));
+  }
+  .peek-left img{ margin-left: -6px; }
+  .peek-right img{ margin-right: -6px; }
+
+  /* not enough side room — drop them back to the section edge */
+  @media (max-width: 1040px){
+    .peek{ position:static; padding: 34px 0 0; }
+    .peek-left{ justify-content:flex-start; }
+    .peek-right{ justify-content:flex-end; }
+  }
+
+  /* SIGNUP */
+  .signup{ padding: 10px 0 80px; }
+  .signup-inner{ max-width: 430px; margin: 0 auto; text-align:center; color:#FBF8F1; }
+  .signup p{
+    font-size: 1rem; font-weight:500; line-height:1.7; margin: 0 0 20px;
+  }
+  .signup-form{ display:flex; gap:10px; }
+  .signup-form input{
+    flex:1; min-width:0;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.34);
+    border-radius: 999px; padding: 12px 20px;
+    font: 400 0.92rem "Inter", sans-serif; color:#FBF8F1;
+  }
+  .signup-form input::placeholder{ color: rgba(251,248,241,0.6); }
+  .signup-form input:focus{
+    outline:none; border-color:#FBF8F1; background: rgba(255,255,255,0.2);
+  }
+  .signup-form button{ border:none; cursor:pointer; font-family:"Inter",sans-serif; }
+  .signup-note{
+    font-size: 0.82rem; font-weight:400; color: rgba(251,248,241,0.62);
+    margin: 14px 0 0;
+  }
+
+  /* FOOTER */
+  .footer{ padding: 26px 0 38px; }
+  .footer-inner{
+    max-width: 1080px; margin: 0 auto; padding: 0 32px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 14px; flex-wrap: wrap;
+    font-size: 0.82rem; color: var(--ink-soft);
+  }
+  .footer-links{ display:flex; gap: 22px; }
+  .footer-links a{ text-decoration:none; }
+  .footer-links a:hover{ text-decoration:underline; text-underline-offset: 3px; }
+
+  @media (max-width: 780px){
+    .hero{ padding: 10px 0 40px; }
+    .wrap, .wrap-wide{ padding: 0 18px; }
+    h1{
+      font-size: min(7.2vw, 2.3rem); white-space: nowrap;
+      letter-spacing: -0.01em; margin-bottom: 8px;
+    }
+    .tagline{ font-size: min(4.4vw, 1.25rem); white-space: nowrap; }
+    .hero-grid{ grid-template-columns: 1fr; text-align:center; gap: 24px; }
+    .hero-image{ order:-1; }
+    .hero-note{ margin-left:auto; margin-right:auto; font-size: min(3.9vw, 1rem); }
+    .hero-image img{ max-width: 170px; }
+    .scroll-cue{ bottom: 18px; font-size: 0.85rem; }
+    .row-grid{ grid-template-columns: 1fr; gap: 56px; }
+    .cell-img{ height: auto; }
+    .cell-img img{ height:auto; width:100%; max-height: 70svh; }
+    .section-title{ margin-bottom: 40px; }
+    .letter{ padding: 96px 0 84px; }
+    .signup{ padding: 44px 0 90px; }
+    .letter-inner{ padding: 0 6px; }
+    .signup-form{ flex-direction:column; }
+    .signup-form button{ width:100%; }
+    .peek img{ width: clamp(90px, 22vw, 130px); }
+    .footer-inner{ justify-content:center; text-align:center; }
+  }
+
+  /* 竖屏 / 窄屏用竖版底图，横版拉伸后爪印会变形 */
+  @media (max-width: 900px){
+    body{ background-image: url("crinkle-bg-story-1080x1920.png"); }
+  }
+  /* 方图适合介于两者之间的平板 */
+  @media (min-width: 901px) and (max-width: 1200px){
+    body{ background-image: url("crinkle-bg-square-1080.png"); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .btn{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <img class="brand-mark" src="appIcon.png" alt="">
+      <span class="wordmark hand">Crinkle</span>
+    </a>
+    <a class="btn btn-nav" href="https://testflight.apple.com/join/jCTxr58f" target="_blank" rel="noopener">iOS Download</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero" id="top">
+    <div class="wrap-wide hero-grid">
+      <div class="hero-text">
+        <h1 class="hand">Crinkle: Cat vs. Worst App</h1>
+        <p class="tagline hand">Crinkle turns your screen time into a fight.</p>
+        <a class="btn" href="https://testflight.apple.com/join/jCTxr58f" target="_blank" rel="noopener">iOS Download</a>
+        <p class="hero-note hand">In beta and getting better &mdash; come try it!
+          <!-- later: &middot; <a href="INSTAGRAM_URL" target="_blank" rel="noopener">Follow along</a> -->
+        </p>
+        <a class="scroll-cue hand" href="#how">see how it works ↓</a>
+      </div>
+      <div class="hero-image">
+        <img src="cat-speechless.png" alt="Crinkle the cat">
+      </div>
+    </div>
+  </section>
+
+  <section class="row" id="how">
+    <div class="peek peek-left"><img src="LookingFromLeft.png" alt=""></div>
+    <div class="wrap">
+      <h2 class="section-title hand">how it works</h2>
+      <div class="row-grid">
+        <div class="cell">
+          <span class="num hand">step 1</span>
+          <p class="cap">Pick a foe that feeds the bag, and a friend that feeds the cat.</p>
+          <div class="cell-img"><img src="Explanation-1.png" alt="Choosing a foe and a friend app"></div>
+        </div>
+        <div class="cell">
+          <span class="num hand">step 2</span>
+          <p class="cap">Every minute in an app feeds that side — up to two hours a day.</p>
+          <div class="cell-img"><img src="Explanation-2.png" alt="Duel in progress"></div>
+        </div>
+        <div class="cell">
+          <span class="num hand">step 3</span>
+          <p class="cap">At midnight, whoever ate more wins.</p>
+          <div class="cell-img"><img src="Explanation-3.png" alt="Duel result"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="wrap">
+      <h2 class="section-title hand">what's more</h2>
+      <div class="row-grid">
+        <div class="cell">
+          <p class="label hand">All-size widgets</p>
+          <div class="cell-img"><img src="NiceFeature-Widgets.png" alt="Home screen widgets"></div>
+        </div>
+        <div class="cell">
+          <p class="label hand">Duel history</p>
+          <div class="cell-img"><img src="NiceFeature-History.png" alt="Duel history calendar"></div>
+        </div>
+        <div class="cell">
+          <p class="label hand">Achievements to unlock</p>
+          <div class="cell-img"><img src="NiceFeature-Achievement.png" alt="Achievements record book"></div>
+        </div>
+      </div>
+    </div>
+    <div class="peek peek-right"><img src="LookingFromRight.png" alt=""></div>
+  </section>
+
+  <section class="letter">
+    <div class="wrap">
+      <div class="letter-inner">
+        <h2 class="section-title hand">a note from the developer</h2>
+        <p>I built this because I couldn&rsquo;t put my own phone down either, and kept scrolling, and scrolling, and scrolling.</p>
+        <p>Some days the apps still win. I try to just note it down and start over the next morning, instead of making it mean something bigger.</p>
+        <p>I'm learning to be as patient with myself as I am with my cat.</p>
+        <p class="links">Something broken, or an idea? <a href="mailto:support@feedcrinkle.com">support@feedcrinkle.com</a></p>
+        <p class="version">— Crinkle v1.1</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+
+  <section class="signup">
+    <div class="wrap">
+      <div class="signup-inner">
+        <p>Not ready to install anything? Leave your email and I&rsquo;ll write when Crinkle reaches the App Store.</p>
+        <!-- Swap the action below for your Buttondown / Kit / Formspree endpoint -->
+        <form class="signup-form" action="https://formspree.io/f/mgawgrdd" method="post" target="_blank">
+          <input type="email" name="email" placeholder="you@email.com" aria-label="Email address" required>
+          <button class="btn" type="submit">Keep me posted</button>
+        </form>
+        <p class="signup-note">No spam, no newsletter. Just the one email.</p>
+      </div>
+    </div>
+  </section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span>&copy; 2026 Crinkle. All rights reserved.</span>
+    <nav class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Use</a>
+      <a href="mailto:support@feedcrinkle.com">Support</a>
+    </nav>
+  </div>
+</footer>
+
+
+
+<script>
+  /* keeps the hero title + tagline on a single line at any phone width */
+  (function(){
+    var h1 = document.querySelector('.hero h1');
+    var tag = document.querySelector('.hero .tagline');
+    var note = document.querySelector('.hero-note');
+    function fit(el){
+      if(!el) return;
+      el.style.fontSize = '';
+      if(window.innerWidth > 780) return;
+      var avail = el.parentElement.clientWidth;
+      var size = parseFloat(getComputedStyle(el).fontSize);
+      var w = el.scrollWidth;
+      if(w > avail) el.style.fontSize = Math.floor(size * (avail / w) * 100) / 100 + 'px';
+    }
+    function run(){ fit(h1); fit(tag); fit(note); }
+    run();
+    window.addEventListener('resize', run);
+    window.addEventListener('orientationchange', run);
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  })();
+</script>
+</body>
+</html>
