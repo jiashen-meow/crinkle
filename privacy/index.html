@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base href="/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crinkle Privacy Policy</title>
+<meta name="description" content="Crinkle Privacy Policy">
+<link rel="icon" href="appIcon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schoolbell&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky: #449DD1;
+    --sky-deep: #3C8DBE;
+    --cream: #F4EFE2;
+    --ink: #14232E;
+    --ink-soft: rgba(20,35,46,0.66);
+    --border: rgba(20,35,46,0.16);
+    --nav-h: 92px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0; overflow-x:hidden;
+    background-color: var(--sky);            /* 图片没加载出来时的兜底色 */
+    background-image: url("crinkle-bg-wide-2400x1350.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  img{ display:block; max-width:100%; }
+  a{ color: inherit; }
+  .hand{ font-family: "Schoolbell", cursive; font-weight:400; }
+
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .wrap-wide{ max-width: 1220px; margin: 0 auto; padding: 0 32px; }
+
+  /* NAV */
+  .nav{ padding: 26px 0; }
+  .nav-inner{
+    max-width: 1220px; margin:0 auto; padding: 0 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .brand-mark{
+    width: 30px; height: 30px; border-radius: 7px;
+    box-shadow: 0 2px 8px rgba(20,35,46,0.22);
+  }
+  .wordmark{ font-size: 1.45rem; }
+
+  .btn{
+    display:inline-block;
+    border-radius: 999px; font-weight:600; text-decoration:none;
+    padding: 12px 26px; font-size: 0.92rem;
+    background: var(--ink); color: var(--cream);
+    box-shadow: 0 4px 14px rgba(20,35,46,0.22);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); box-shadow: 0 8px 20px rgba(20,35,46,0.28); }
+  .btn-nav{ padding: 9px 20px; font-size: 0.85rem; }
+
+  /* HERO — fills the first screen */
+  .hero{
+    position:relative;
+    min-height: calc(100svh - var(--nav-h));
+    display:flex; align-items:center;
+    padding: 20px 0 90px;
+  }
+  .hero-grid{
+    width:100%;
+    display:grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items:center;
+  }
+  h1{
+    font-size: clamp(2.1rem, 4vw, 3rem);
+    font-weight: 400;
+    margin: 0 0 10px;
+    line-height: 1.18;
+  }
+  .tagline{
+    font-size: 1.3rem; font-weight:400;
+    margin: 0 0 44px; color: rgba(20,35,46,0.72);
+  }
+  .hero-image{ display:flex; justify-content:center; }
+  .hero-image img{
+    width: 100%; max-width: 250px;
+    filter: drop-shadow(0 14px 26px rgba(20,35,46,0.26));
+  }
+  .hero-note{
+    margin: 14px 0 0; font-size: 1rem; line-height: 1.5;
+    color: rgba(20,35,46,0.58); white-space: nowrap;
+  }
+  .hero-note a{ color: inherit; text-underline-offset: 3px; }
+  .scroll-cue{
+    position:absolute; left:50%; bottom: 30px; transform: translateX(-50%);
+    font-size: 0.9rem; color: rgba(20,35,46,0.55); text-decoration:none;
+    white-space: nowrap;
+  }
+  .scroll-cue:hover{ color: var(--ink); }
+
+  /* SECTIONS */
+  .row{ padding: 70px 0 80px; position:relative; }
+  .section-title{
+    font-size: clamp(1.7rem, 2.8vw, 2.1rem);
+    text-align:center; margin: 0 0 54px;
+  }
+  .row-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+  }
+
+  .cell{ text-align:center; display:flex; flex-direction:column; min-width:0; }
+  .cell .num{
+    display:block; font-size: 1.4rem;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .cell .cap{
+    color: var(--ink-soft); font-size: 0.95rem;
+    max-width: 30ch; margin: 0 auto 22px;
+  }
+  .cell .label{
+    color: var(--ink); font-size: 1.3rem; margin: 0 0 22px;
+  }
+  .cell-img{
+    position:relative; z-index:1;
+    height: clamp(380px, 46vw, 560px);
+    display:flex; align-items:flex-end; justify-content:center;
+    margin-top: auto;
+  }
+  .cell-img img{
+    height: 100%; max-width: 100%; width:auto; object-fit: contain;
+    filter: drop-shadow(0 18px 34px rgba(20,35,46,0.30));
+  }
+
+  /* LETTER — a paper note on the blue */
+  .letter{
+    min-height: calc(100svh - 100px);
+    display:flex; align-items:center;
+    padding: 60px 0;
+  }
+  .letter > .wrap{ width:100%; }
+  .letter-inner{
+    max-width: 430px; margin: 0 auto; text-align:center;
+    color: #FBF8F1;
+  }
+  .letter .section-title{
+    color: #FBF8F1; font-size: clamp(1.5rem, 2.4vw, 1.85rem);
+    margin: 0 0 34px;
+  }
+  .letter p{
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 1rem; font-weight:500; line-height: 1.8;
+    margin: 0 0 22px;
+  }
+  .letter a{ text-decoration: underline; text-underline-offset: 3px; }
+  .letter .links{ color: #FBF8F1; font-weight:500; }
+  .letter .version{
+    font-size: 0.8rem; color: rgba(251,248,241,0.62); font-weight:500; margin: 34px 0 0;
+  }
+
+
+  /* cat heads poking in from the edges, bottom-aligned with the screenshots */
+  .peek{
+    position:absolute; bottom: 24px; z-index:0;
+    display:flex; line-height:0;
+  }
+  .peek-left{ left:0; }
+  .peek-right{ right:0; }
+  .peek img{
+    width: clamp(92px, 10.5vw, 150px);
+    filter: drop-shadow(0 12px 24px rgba(20,35,46,0.26));
+  }
+  .peek-left img{ margin-left: -6px; }
+  .peek-right img{ margin-right: -6px; }
+
+  /* not enough side room — drop them back to the section edge */
+  @media (max-width: 1040px){
+    .peek{ position:static; padding: 34px 0 0; }
+    .peek-left{ justify-content:flex-start; }
+    .peek-right{ justify-content:flex-end; }
+  }
+
+  /* SIGNUP */
+  .signup{ padding: 10px 0 80px; }
+  .signup-inner{ max-width: 430px; margin: 0 auto; text-align:center; color:#FBF8F1; }
+  .signup p{
+    font-size: 1rem; font-weight:500; line-height:1.7; margin: 0 0 20px;
+  }
+  .signup-form{ display:flex; gap:10px; }
+  .signup-form input{
+    flex:1; min-width:0;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.34);
+    border-radius: 999px; padding: 12px 20px;
+    font: 400 0.92rem "Inter", sans-serif; color:#FBF8F1;
+  }
+  .signup-form input::placeholder{ color: rgba(251,248,241,0.6); }
+  .signup-form input:focus{
+    outline:none; border-color:#FBF8F1; background: rgba(255,255,255,0.2);
+  }
+  .signup-form button{ border:none; cursor:pointer; font-family:"Inter",sans-serif; }
+  .signup-note{
+    font-size: 0.82rem; font-weight:400; color: rgba(251,248,241,0.62);
+    margin: 14px 0 0;
+  }
+
+  /* FOOTER */
+  .footer{ padding: 26px 0 38px; }
+  .footer-inner{
+    max-width: 1080px; margin: 0 auto; padding: 0 32px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 14px; flex-wrap: wrap;
+    font-size: 0.82rem; color: var(--ink-soft);
+  }
+  .footer-links{ display:flex; gap: 22px; }
+  .footer-links a{ text-decoration:none; }
+  .footer-links a:hover{ text-decoration:underline; text-underline-offset: 3px; }
+
+  @media (max-width: 780px){
+    .hero{ padding: 10px 0 40px; }
+    .wrap, .wrap-wide{ padding: 0 18px; }
+    h1{
+      font-size: min(7.2vw, 2.3rem); white-space: nowrap;
+      letter-spacing: -0.01em; margin-bottom: 8px;
+    }
+    .tagline{ font-size: min(4.4vw, 1.25rem); white-space: nowrap; }
+    .hero-grid{ grid-template-columns: 1fr; text-align:center; gap: 24px; }
+    .hero-image{ order:-1; }
+    .hero-note{ margin-left:auto; margin-right:auto; font-size: min(3.9vw, 1rem); }
+    .hero-image img{ max-width: 170px; }
+    .scroll-cue{ bottom: 18px; font-size: 0.85rem; }
+    .row-grid{ grid-template-columns: 1fr; gap: 56px; }
+    .cell-img{ height: auto; }
+    .cell-img img{ height:auto; width:100%; max-height: 70svh; }
+    .section-title{ margin-bottom: 40px; }
+    .letter{ padding: 96px 0 84px; }
+    .signup{ padding: 44px 0 90px; }
+    .letter-inner{ padding: 0 6px; }
+    .signup-form{ flex-direction:column; }
+    .signup-form button{ width:100%; }
+    .peek img{ width: clamp(90px, 22vw, 130px); }
+    .footer-inner{ justify-content:center; text-align:center; }
+  }
+
+  /* 竖屏 / 窄屏用竖版底图，横版拉伸后爪印会变形 */
+  @media (max-width: 900px){
+    body{ background-image: url("crinkle-bg-story-1080x1920.png"); }
+  }
+  /* 方图适合介于两者之间的平板 */
+  @media (min-width: 901px) and (max-width: 1200px){
+    body{ background-image: url("crinkle-bg-square-1080.png"); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .btn{ transition:none; }
+  }
+</style>
+<style>
+.policy{max-width:800px;margin:24px auto 64px;padding:40px;background:var(--cream);border-radius:20px;overflow-wrap:anywhere}
+.policy h1{white-space:normal;font-size:clamp(2rem,5vw,3rem);line-height:1.3;margin:0 0 16px}
+.policy h2{font-size:1.65rem;line-height:1.4;margin:36px 0 14px}
+.policy p,.policy li{font-size:1rem;line-height:1.85}.policy li{margin:6px 0}.policy ul{padding-left:24px}
+.policy .effective{color:var(--ink-soft);margin-bottom:28px}.policy a{text-underline-offset:3px}
+@media(max-width:780px){.policy{margin:16px 18px 40px;padding:26px 22px}.nav-inner{padding:0 18px}}
+</style></head><body><header class="nav"><div class="nav-inner"><a class="brand" href="/"><img class="brand-mark" src="appIcon.png" alt=""><span class="wordmark hand">Crinkle</span></a><a href="/cn/privacy" lang="zh-CN">中文</a></div></header><main class="policy"><h1 class="hand">Crinkle Privacy Policy</h1>
+<p class="effective">Effective date: October 30, 2026</p>
+<p>Crinkle is developed by Jia Shen. Crinkle works without signing in or creating an account. Your app information stays on your device, and we do not operate servers that receive your Screen Time data or app history.</p>
+<h2 class="hand">Information stored on your device</h2>
+<p>Crinkle stores information needed to provide its features, including:</p>
+<ul><li>Your selected apps and activity preferences.</li><li>Screen Time activity totals used to calculate daily results.</li><li>Your history, achievements, and streaks.</li><li>Your settings and customizations, such as your cat’s name.</li></ul>
+<p>This information is processed locally and shared between Crinkle and its related app extensions on your device so that monitoring, reports, and other features can work.</p>
+<h2 class="hand">Screen Time access</h2>
+<p>With your permission, Crinkle uses Apple’s Screen Time frameworks, including Family Controls and Device Activity, to monitor activity for the apps you select and display activity reports.</p>
+<p>Crinkle uses this information only to provide its Screen Time features. We do not receive your Screen Time data, use it for advertising, or sell or share it with data brokers.</p>
+<p>You can revoke Crinkle’s Screen Time access in your device’s Settings. Features that depend on this permission will stop working when access is revoked.</p>
+<h2 class="hand">Notifications</h2>
+<p>If you allow notifications, Crinkle may schedule local reminders and activity notifications on your device. You can turn these off at any time in Settings.</p>
+<h2 class="hand">Advertising and analytics</h2>
+<p>Crinkle does not include third-party advertising or analytics services. We do not track you across other apps or websites.</p>
+<h2 class="hand">Storage, backups, and deletion</h2>
+<p>Crinkle retains its locally stored information while the app is installed, unless that information is reset or removed.</p>
+<p>To remove Crinkle’s local app data, delete the app from your device rather than offloading it. Crinkle does not delete the Screen Time records maintained separately by iOS.</p>
+<p>Depending on your device settings and Apple’s backup features, Crinkle’s locally stored data may be included in device backups. We do not provide a backup or recovery service and cannot guarantee that your data can be restored. We cannot access or delete your device backups.</p>
+<h2 class="hand">Purchases</h2>
+<p>If you purchase Crinkle or an optional paid feature through the App Store, Apple processes the payment. We do not receive your payment card details. Apple handles purchase information under its own privacy policy.</p>
+<h2 class="hand">Contacting support</h2>
+<p>If you contact us, we receive the information you choose to provide, such as your email address and message. We use it to respond to your request and resolve support issues, and retain it only as needed for those purposes or to meet legal obligations.</p>
+<p>Please avoid sending sensitive information or Screen Time screenshots unless they are needed to explain your issue. You can contact us to request deletion of support correspondence, subject to any applicable retention requirements.</p>
+<h2 class="hand">Changes to this policy</h2>
+<p>We may update this policy when Crinkle’s features or privacy practices change. The current version will be published on this page with an updated effective date.</p>
+<h2 class="hand">Contact</h2>
+<p>For privacy questions or requests, contact:</p>
+<p>Jia Shen<br><a href="mailto:support@feedcrinkle.com">support@feedcrinkle.com</a></p></main><footer class="footer"><div class="footer-inner"><span>© 2026 Crinkle</span><nav class="footer-links"><a href="/">Home</a><a href="/support">Support</a></nav></div></footer></body></html>
